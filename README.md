@@ -1,3 +1,4 @@
+[![CakeMacs Logo](https://github.com/connorakey/cakemacs/blob/main/resources/images/cakemacs.png?raw=true)](https://github.com/connorakey/cakemacs)
 
 # CakeMacs
 Welcome to CakeMacs, an Emacs distribution and a hobby project maintained by Connor Akey.
