@@ -1,0 +1,18 @@
+
+* TABLE OF CONTENTS :toc:
+- [[#bin-directory][Bin Directory]]
+  - [[#cakemacssh-file][Cakemacs.sh file]]
+  - [[#cakemacsc-file][Cakemacs.c file]]
+  - [[#cakemacs-file][CakeMacs file]]
+
+* Bin Directory
+Hello There User, you may be wondering what this directory is for and what the various files to, this file will explain what this is for and how it isn't required but makes the user experience way better.
+
+** Cakemacs.sh file
+The Cakemacs.sh file is a shell script that manages the updating, removing, installation and purging of CakeMacs like this entire directory it is not requried at all, but is recommended for new users or users who don't want to go through the trouble of manually updating, installing, removing and purging. For more info you can use the help command that comes with this shell script (you must give yourself permission to execute it with chmod +x ./cakemacs.sh
+
+** Cakemacs.c file
+The CakeMacs.c file is C code that automates the permission giving of the shell file this is so the user doesn't need to manually do it. The CakeMacs file could be a compiled version of this code, due to maximum transparency we want to keep the source code avaliable, we need this file since linux doesn't allow chmod +x to work globally on all computers. This file automatically replaces it self with a version of the Cakemacs.sh file which is executeable on your system.
+
+** CakeMacs file
+This file is EITHER the compiled version of the Cakemacs.c file or the Cakemacs.sh file depending if you've ran the file before. More information is above on the specific header.

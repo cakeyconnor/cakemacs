@@ -1,0 +1,10 @@
+#!/bin/sh
+
+case "$1" in
+    sync)
+	git -C ~/.cakemacs.d/ pull
+	;;
+    *)
+	echo "Usage: cakemacs [sync]"
+	;;
+    esac

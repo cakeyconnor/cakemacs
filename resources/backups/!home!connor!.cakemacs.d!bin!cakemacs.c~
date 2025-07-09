@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    printf("First time running CakeMacs Shell, setting it up...\n");
+
+    const char *home = getenv("HOME");
+    if (!home) {
+        fprintf(stderr, "Could not get HOME environment variable.\n");
+        return 1;
+    }
+
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd),
+        "chmod +x '%s/.cakemacs.d/bin/cakemacs.sh' && "
+        "mv -f '%s/.cakemacs.d/bin/cakemacs.sh' '%s/.cakemacs.d/bin/cakemacs'",
+        home, home, home);
+
+    int ret = system(cmd);
+    if (ret != 0) {
+        fprintf(stderr,
+            "Failed to make cakemacs.sh executable and rename it.\n"
+            "Please manually run:\n"
+            "  chmod +x ~/.cakemacs.d/bin/cakemacs.sh\n"
+            "  mv ~/.cakemacs.d/bin/cakemacs.sh ~/.cakemacs.d/bin/cakemacs\n");
+    } else {
+        printf("Setup complete. cakemacs.sh renamed to cakemacs and is executable.\n");
+    }
+
+    return 0;
+}

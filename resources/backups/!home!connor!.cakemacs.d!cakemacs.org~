@@ -1,0 +1,717 @@
+[[./resources/images/cakemacs.png]]
+* INFORMATION
+Welcome to the CakeMacs emacs distrobution, this is a hobby project maintained by Connor Akey on github. My goal is to make a distrobution that can easily be made perfect for my self and others, with minimal setup, new technologies and future proof standards.
+
+** What is this file?
+This file is where all of the configuration for CakeMacs is done, both what we have done and what you will/have done, this philosophy allows for full customisability, while not needing to create an entire Emacs environment from scratch.
+
+** Who are you targetting?
+This Emacs distrobution is targetting intermedite/advanced users who want full customisability of their Emacs environment without the hassle of setting one up from Scratch, CakeMacs is a perfect mix between vanilla emacs and preconfigured mega emacs distros like [[https://github.com/doomemacs/doomemacs][doom emacs]] or [[https://www.spacemacs.org/][spacemacs]].
+
+** What are the selling points of Cakemacs?
+CakeMacs doesn't use any complicated file structures where configuration is almost impossible, it uses one single file that stores everything neatly and alphabetically. Organisation is up to the end user and so is the configuration effort, quality and final output. However CakeMacs comes with the pros of [[https://www.spacemacs.org/][spacemacs]] and [[https://github.com/doomemacs/doomemacs][doom]] with a fully setup environment for coding, text editing and overall browsing the system. You also have the ability to fully define the file structure of your CakeMacs, which we call a slice (a CakeMacs configuration) for example if you find the essential programs list to be cluddered and take up too much space you can move it to a different file and call it in via require.
+
+** Slices
+An idea of a slide is the publication of your own CakeMacs configuration, often being the publishing of your configured .org file for CakeMacs, as CakeMacs is one of the more configurable distrobutions each slice will vary a ton. There is zero shame in using a premade slice for what you want to do. Eventually if this repository gets traction I'll add a slices repository where you can find new and unique slices.
+
+** Credits
+I believe since this project took tons of inspiration off of other I would like to give credit where credit is due, first of all a huge credit to DistroTube as their video configuring Emacs inspired me to create CakeMacs, [[https://www.youtube.com/watch?v=d1fgypEiQkE&list=PL5--8gKSku15e8lXf7aLICFmAHQVo0KXX][his video]] have heavily inspired me while making this and each of the areas where I copied from his configuration is credited.
+
+
+
+[[./resources/images/cakemacs.png]]
+
+* TABLE OF CONTENTS :toc:
+- [[#information][INFORMATION]]
+  - [[#what-is-this-file][What is this file?]]
+  - [[#who-are-you-targetting][Who are you targetting?]]
+  - [[#what-are-the-selling-points-of-cakemacs][What are the selling points of Cakemacs?]]
+  - [[#slices][Slices]]
+  - [[#credits][Credits]]
+- [[#setting-up-cakemacs][Setting up CakeMacs]]
+  - [[#the-rest-is-coming-soon-when-configuration-is-fully-done][the rest is coming soon when configuration is fully done]]
+- [[#essential-programs][ESSENTIAL PROGRAMS]]
+  - [[#elpaca][Elpaca]]
+  - [[#evil-mode][Evil Mode]]
+  - [[#general-keybindings][General Keybindings]]
+- [[#all-the-icons][ALL THE ICONS]]
+- [[#buffer-move][BUFFER MOVE]]
+- [[#backup-configuration][BACKUP CONFIGURATION]]
+- [[#company][COMPANY]]
+- [[#dashboard][DASHBOARD]]
+- [[#flycheck][FLYCHECK]]
+- [[#graphical-user-interface-tweaks][GRAPHICAL USER INTERFACE TWEAKS]]
+  - [[#fonts][Fonts]]
+  - [[#zooming-inout][Zooming In/Out]]
+  - [[#disable-menubar-toolbars-and-scrollbars][Disable Menubar, Toolbars, and Scrollbars]]
+  - [[#display-line-numbers-and-truncated-lines][Display Line Numbers and Truncated Lines]]
+- [[#language-support][LANGUAGE SUPPORT]]
+- [[#modeline][MODELINE]]
+- [[#neotree][NEOTREE]]
+- [[#org-mode][ORG MODE]]
+  - [[#enabling-table-of-contents][Enabling Table of Contents]]
+  - [[#enable-org-bullets][Enable Org Bullets]]
+  - [[#source-code-block-tag-expansion][Source Code Block Tag Expansion]]
+  - [[#inline-images][Inline Images]]
+- [[#peep-dired][PEEP DIRED]]
+- [[#projectile][PROJECTILE]]
+- [[#rainbow-mode][RAINBOW MODE]]
+- [[#reload-emacs][RELOAD EMACS]]
+- [[#shells-and-terminals][SHELLS AND TERMINALS]]
+- [[#themeing][THEMEING]]
+- [[#vertico-completion-stack][VERTICO COMPLETION STACK]]
+- [[#which-key][WHICH-KEY]]
+
+* Setting up CakeMacs
+This section will give you a full guide on a basic setup of CakeMacs with the ability to choose your own theme (if you dont like the default CakeMacs theme), setup custom coding languages you use, and add custom programs. Alongside more advanced topics like customising keybinds, and discarding components and changing it with others. Eg. switching neotree to treemacs for more advanced customisation.
+
+** the rest is coming soon when configuration is fully done
+
+* ESSENTIAL PROGRAMS
+Underneath this section is essential programs that are required to load first for CakeMacs to work properly, this includes: A package manager (elpaca), lazy (for vim keybindings), and general (for creating custom keybindings).
+
+** Elpaca
+[[https://github.com/progfolio/elpaca][Elpaca]] is a package manager for Emacs that is a alternative to the built in package.el, offering enhanced features for managing Emacs packages, it has features such as Asynchronous installations, sandboxing, source=control and extensive repository support.
+
+#+begin_src emacs-lisp
+(defvar elpaca-installer-version 0.11)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order
+  '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+           :ref nil :depth 1 :inherit ignore
+           :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+           :build (:not elpaca--activate-package)))
+(let* ((repo (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (<= emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+
+;; Enable use-package integration
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode)
+  (setq elpaca-use-package-by-default t))
+
+(elpaca-wait)
+#+end_src
+
+** Evil Mode
+Evil Mode is an Emacs program that allows for vim keybindings, motions and command via emulating vim within Emacs at a minimal performance cost.
+#+begin_src emacs-lisp
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-vsplit-window-right t)
+  (setq evil-split-window-below t)
+  :config
+  (evil-mode 1))
+
+   (use-package evil-collection
+    :after evil
+    :config
+    (setq evil-collection-mode-list '(dashboard dired ibuffer))
+    (evil-collection-init))
+#+end_src
+
+** General Keybindings
+[[https://github.com/noctuid/general.el][General]] is a keybindings system for Emacs which allows mapping specific 'M-x' commands to keybindings, for example linking 'SPC d d' to open dired (emac's file manager).
+
+To add more keybindings to seperate commands you can create a cakemacs binds list with
+(cakemacs/binds
+  "LETTER" ('ACTION :wk "DESCRIPTION")
+
+However, as a definition letter for example g, for git you would want to do this
+"LETTER" '(:ignore t :wk "DESCRIPTION")
+
+This will likely be one of the most configured areas in the entire configuration, so I would take a close look at this to see if you want to change any of the keybindings.
+
+#+begin_src emacs-lisp
+  (use-package general
+    :config
+    (general-create-definer cakemacs/binds
+      :states '(normal insert visual emacs)
+      :keymaps 'override
+      :prefix "SPC" ;; set leader
+      :global-prefix "M-SPC") 
+
+    (cakemacs/binds
+     "x" '(execute-extended-command :wk "Consult M-x")
+     "."   '(dired :wk "Find file")
+
+     "f c" '((lambda () (interactive) (find-file "~/.cakemacs.d/cakemacs.org")) :wk "Edit Emacs configuration")
+     "f r" '(consult-recent-file :wk "Find recent files")
+     "TAB TAB" '(comment-line :wk "Comment lines")
+
+     ;; Buffer Management
+     "b"   '(:ignore t :wk "Buffer Management")
+     "b b" '(consult-buffer :wk "Switch buffer")
+     "b i" '(ibuffer :wk "Ibuffer")
+     "b k" '(kill-this-buffer :wk "Kill this buffer")
+     "b n" '(next-buffer :wk "Next buffer")
+     "b p" '(previous-buffer :wk "Previous buffer")
+     "b r" '(revert-buffer :wk "Reload buffer")
+
+     ;; Help
+     "h" '(:ignore t :wk "Help")
+     "h f" '(describe-function :wk "Describe function")
+     "h t" '(load-theme :wk "Load theme")
+     "h v" '(describe-variable :wk "Describe variable")
+     "h r r" '(reload-init-file :wk "Reload emacs config")
+     
+     ;; Search
+     "s"   '(:ignore t :wk "Search")
+     "s g" '(consult-git-grep :wk "Git repo grep")
+     "s k" '(consult-keep-lines :wk "Keep matching lines")
+     "s m" '(consult-mark :wk "Jump to marks")
+     "s r" '(consult-ripgrep :wk "Search in project")
+     "s s" '(consult-line :wk "Search in buffer")
+     "s u" '(consult-focus-lines :wk "Focus visible region")
+     "s y" '(consult-yank-pop :wk "Clipboard history")
+
+     ;; Toggle
+     "t" '(:ignore t :wk "Toggle")
+     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+     "t n" '(neotree-toggle :wk "Toggle neotree file viewer")
+     "t t" '(visual-line-mode :wk "Toggle truncated lines")
+     "t v" '(vterm-toggle :wk "Toggle vterm")
+
+     ;; Window Management
+     "w"   '(:ignore t :wk "Window Management")
+     "w c" '(evil-window-delete :wk "Close window")
+     "w n" '(evil-window-new :wk "New window")
+     "w s" '(evil-window-split :wk "Horizontal split")
+     "w v" '(evil-window-vsplit :wk "Vertical split")
+     "w h" '(evil-window-left :wk "Focus left")
+     "w j" '(evil-window-down :wk "Focus down")
+     "w k" '(evil-window-up :wk "Focus up")
+     "w l" '(evil-window-right :wk "Focus right")
+     "w w" '(evil-window-next :wk "Next window")
+     "w H" '(buf-move-left :wk "Buffer move left")))
+
+#+end_src
+
+* ALL THE ICONS
+[[https://github.com/domtronn/all-the-icons.el][All the Icons]] is a collection of icons built for Emacs, to install all of the icons into the font directory (essentially allowing the icons to work) please run 'M-x all-the-icons-install-fonts' to install all of the required fonts.
+
+You can switch [[https://github.com/domtronn/all-the-icons.el][All the icons]] for a popular alternative called [[https://github.com/rainstormstudio/nerd-icons.el][Nerd Icons]], however it is to note that All the Icons is far more used than nerd-icons theirfore we recommend using it within your slice.
+
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :ensure t
+    :if (display-graphic-p))
+
+  (use-package all-the-icons-dired
+    :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+#+end_src
+
+* BUFFER MOVE
+Buffer Move is a collection of functions that originate from [[https://gitlab.com/dwt1/configuring-emacs/-/blob/main/07-the-final-touches/config.org?ref_type=heads][DT's Vanilla Emacs Configuration]] that allow for easier movement of Buffers across Emacs.
+
+#+begin_src emacs-lisp
+  (require 'windmove)
+
+  ;;;###autoload
+  (defun buf-move-up ()
+    "Swap the current buffer and the buffer above the split.
+  If there is no split, ie now window above the current one, an
+  error is signaled."
+  ;;  "Switches between the current buffer, and the buffer above the
+  ;;  split, if possible."
+    (interactive)
+    (let* ((other-win (windmove-find-other-window 'up))
+  	 (buf-this-buf (window-buffer (selected-window))))
+      (if (null other-win)
+          (error "No window above this one")
+        ;; swap top with this one
+        (set-window-buffer (selected-window) (window-buffer other-win))
+        ;; move this one to top
+        (set-window-buffer other-win buf-this-buf)
+        (select-window other-win))))
+
+  ;;;###autoload
+  (defun buf-move-down ()
+  "Swap the current buffer and the buffer under the split.
+  If there is no split, ie now window under the current one, an
+  error is signaled."
+  (interactive)
+    (let* ((other-win (windmove-find-other-window 'down))
+  	 (buf-this-buf (window-buffer (selected-window))))
+      (if (or (null other-win) 
+              (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
+          (error "No window under this one")
+        ;; swap top with this one
+        (set-window-buffer (selected-window) (window-buffer other-win))
+        ;; move this one to top
+        (set-window-buffer other-win buf-this-buf)
+        (select-window other-win))))
+
+  ;;;###autoload
+  (defun buf-move-left ()
+    "Swap the current buffer and the buffer on the left of the split.
+  If there is no split, ie now window on the left of the current
+  one, an error is signaled."
+  (interactive)
+    (let* ((other-win (windmove-find-other-window 'left))
+  	 (buf-this-buf (window-buffer (selected-window))))
+      (if (null other-win)
+          (error "No left split")
+        ;; swap top with this one
+        (set-window-buffer (selected-window) (window-buffer other-win))
+        ;; move this one to top
+        (set-window-buffer other-win buf-this-buf)
+        (select-window other-win))))
+
+  ;;;###autoload
+  (defun buf-move-right ()
+    "Swap the current buffer and the buffer on the right of the split.
+  If there is no split, ie now window on the right of the current
+  one, an error is signaled."
+  (interactive)
+    (let* ((other-win (windmove-find-other-window 'right))
+  	 (buf-this-buf (window-buffer (selected-window))))
+      (if (null other-win)
+          (error "No right split")
+        ;; swap top with this one
+        (set-window-buffer (selected-window) (window-buffer other-win))
+        ;; move this one to top
+        (set-window-buffer other-win buf-this-buf)
+        (select-window other-win))))
+#+end_src
+
+* BACKUP CONFIGURATION
+By default Emacs creates backup files in the working directory, which leads to bloat and unreadability, this script below which I found from the [[https://gitlab.com/dwt1/configuring-emacs][Distrotube Emacs Configuration]] moves all of the backup files to the CakeMacs backup directory (~/.cakemacs.d/resources/backups), however the location of this can be changed for example in the [[https://gitlab.com/dwt1/configuring-emacs][Distrotube Emacs Configuration]] it moves to the trash location on most systems.
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist '((".*" . "~/.cakemacs.d/resources/backups")))
+#+end_src
+
+
+* COMPANY
+[[https://github.com/company-mode/company-mode][Company]] is a modular and highly extensible auto completion framework for Emacs. It provides inline, pop-up tile suggestions as you type, helping you complete words symbols and code snippets.
+
+#+begin_src emacs-lisp
+  (use-package company
+    :defer 2
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .1)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t))
+
+  (use-package company-box
+    :after company
+    :hook (company-mode . company-box-mode))
+#+end_src
+
+* DASHBOARD
+[[https://github.com/emacs-dashboard/emacs-dashboard][Dashboard]] is an Emacs package that creates a welcoming screen upon entering Emacs, this program is **EXTREMELY** customisable, and is one of the most customisible here, for the dashboard for vanilla CakeMacs we have gone for the default configuration without agendas, bookmarks, or registers, how ever they are just commented out and you can easily uncomment them if needed.
+
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t 
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to CakeMacs, the best operating system.")
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.cakemacs.d/resources/images/cakemacs.png")  ;; use custom image as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+                          ;;(agenda . 5 )
+                          ;;(bookmarks . 3)
+                          (projects . 3)))
+                          ;;(registers . 3)))
+  :custom 
+  (dashboard-modify-heading-icons '((recents . "file-text")
+				      (projects . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+#+end_src
+
+* FLYCHECK
+[[https://github.com/flycheck/flycheck][Flycheck]] is an Emacs package that does modern on-the-fly syntax checking. It runs linters, compilers and formatters for whatever language your coding in and highlights errors and warnings as you type. However many languages are **not** supported out of the box, for more information on language support [[https://www.flycheck.org/en/latest/languages.html][read this]].
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+  :ensure t
+  :defer t
+  :init (global-flycheck-mode))
+#+end_src
+
+* GRAPHICAL USER INTERFACE TWEAKS
+** Fonts
+In Emacs a good configuration for your fonts is one of the most important aspects, as the main reason you would use something like Emacs over neovim is because of Variable Font Sizes since Emacs isnt just limited to the terminal, the default slice of CakeMacs uses the fonts JetBrains Mono Nerd Font, and Ubuntu Nerd Fonts. If you are looking to use the default slice and not touch this configuration, please install said fonts.
+
+#+begin_src emacs-lisp
+      (set-face-attribute 'default nil
+    :font "JetBrains Mono Nerd Font"
+    :height 110
+    :weight 'medium)
+  (set-face-attribute 'variable-pitch nil
+    :font "Ubuntu Nerd Font"
+    :height 120
+    :weight 'medium)
+  (set-face-attribute 'fixed-pitch nil
+    :font "JetBrains Mono Nerd Font"
+    :height 110
+    :weight 'medium)
+  ;; Makes commented text and keywords italics.
+  ;; This is working in emacsclient but not emacs.
+  ;; Your font must have an italic face available.
+  (set-face-attribute 'font-lock-comment-face nil
+    :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+    :slant 'italic)
+
+  ;; This sets the default font on all graphical frames created after restarting Emacs.
+  ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
+  ;; are not right unless I also add this method of setting the default font.
+  (add-to-list 'default-frame-alist '(font . "JetBrains Mono Nerd Font-11"))
+
+  ;; Uncomment the following line if line spacing needs adjusting.
+  (setq-default line-spacing 0.12)
+
+ ;; Changes the font size of the ORG mode titles
+(custom-set-faces
+ '(org-level-1 ((t (:inherit default :weight bold :height 1.5))))
+ '(org-level-2 ((t (:inherit default :weight bold :height 1.4))))
+ '(org-level-3 ((t (:inherit default :weight bold :height 1.3))))
+ '(org-level-4 ((t (:inherit default :weight bold :height 1.2))))
+ '(org-level-5 ((t (:inherit default :weight bold :height 1.1))))
+ '(org-level-6 ((t (:inherit default :weight bold :height 1.05))))
+ '(org-level-7 ((t (:inherit default :weight bold :height 1.0))))
+ '(org-level-8 ((t (:inherit default :weight bold :height 1.0)))))
+#+end_src
+
+** Zooming In/Out
+Zooming In and Out with Emacs can be important, thankfully Emacs has this built in, this however adds keybinds to make it significantly easier.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+#+end_src
+
+** Disable Menubar, Toolbars, and Scrollbars
+#+begin_src emacs-lisp
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+
+** Display Line Numbers and Truncated Lines
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode 1)
+  (global-visual-line-mode t)
+#+end_src
+
+* LANGUAGE SUPPORT
+Emacs out of the box has built in support for:  Lisp, Scheme, DSSSL, Ada, ASM, AWK, C, C++, Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, M4, Makefiles, Metafont, Modula2, Object Pascal, Objective-C, Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, SQL, Tcl, Verilog, and VHDL. However, if you want other languages you will need to specifically install modes for them which will be shown below.
+
+For example to install a mode for rust you would add (use-package rust-mode) to your source code block. For the sake of minimalism the default slice does not come with any extra languages out of the box, however it is highly recommended to add some coding languages you are likely to work in.
+
+#+begin_src emacs-lisp
+  ;; add your language modes here!
+#+end_src
+
+* MODELINE
+The Vanilla Emacs Modeline isn't very useful and quite frankly pretty ugly, we could spend the time creating a modeline manually from scratch however the doom emacs team has already gone through the work creating an amazing modeline, if you want to configure it manually feel free to remove the default doom-modeline
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+#+end_src
+
+
+
+* NEOTREE
+[[https://github.com/jaypei/emacs-neotree][Neotree]] is an Emacs package that shows a directory tree in a vertical sidebar, allowing you to browse directories, open files, manage files, see git status and more. Inspired from the NerdTree from Vim.
+
+Neotree is an easier alternative to [[https://github.com/Alexander-Miller/treemacs][treemacs]], neotree comes pre-setup which is perfect for the default slice, and it does not need any customisation.
+
+Neotree also has a git-mode package which highlights files based on their git status, extremely useful for coding environments but completely optional.
+
+#+begin_src emacs-lisp
+  (use-package neotree
+  :ensure t
+  :config
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 55
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        projectile-switch-project-action 'neotree-projectile-action)
+
+  ;; truncate long file names in neotree buffer
+  (add-hook 'neo-after-create-hook
+            (lambda (_)
+              (with-current-buffer (get-buffer neo-buffer-name)
+                (setq truncate-lines t)
+                (setq word-wrap nil)
+                (make-local-variable 'auto-hscroll-mode)
+                (setq auto-hscroll-mode nil))))
+
+  ;; Evil bindings for neotree
+  (add-hook 'neotree-mode-hook
+            (lambda ()
+              (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+              (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+              (evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+              (evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
+              (evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line))))
+
+#+end_src
+
+* ORG MODE
+** Enabling Table of Contents
+When using Emacs you will be dealing with org files all the time, especially CakeMacs which defaults to being written entirely in ORG mode, CakeMacs uses a table of contents alongside many other ORG based projects, meaning this is essential if your doing any ORG work.
+
+#+begin_src emacs-lisp
+  (use-package toc-org
+  :commands toc-org-enable
+  :init (add-hook 'org-mode-hook 'toc-org-enable))
+#+end_src
+
+** Enable Org Bullets
+Org-Bullets are purely for looks, it just uses bullet points instead of asterisks, this makes ORG documents look way better.
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (use-package org-bullets)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Source Code Block Tag Expansion
+ORG allows for many short cuts, and this is a program that brings them to the next level, this gives short cuts for common statements used in ORG mode with simple arrow sign then letter combinations.
+
+| Shortcut | Expands to                       |
+|----------+----------------------------------|
+| <a       | #+BEGIN_EXPORT ascii … #+END_EXPORT |
+| <c       | #+BEGIN_CENTER … #+END_CENTER     |
+| <C       | #+BEGIN_COMMENT … #+END_COMMENT   |
+| <e       | #+BEGIN_EXAMPLE … #+END_EXAMPLE   |
+| <E       | #+BEGIN_EXPORT … #+END_EXPORT     |
+| <h       | #+BEGIN_EXPORT html … #+END_EXPORT |
+| <l       | #+BEGIN_EXPORT latex … #+END_EXPORT|
+| <q       | #+BEGIN_QUOTE … #+END_QUOTE       |
+| <s       | #+BEGIN_SRC … #+END_SRC           |
+| <v       | #+BEGIN_VERSE … #+END_VERSE       |
+
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+#+end_src
+
+** Inline Images
+#+begin_src emacs-lisp
+  (setq org-startup-with-inline-images t) ;; Show images on file open
+
+(add-hook 'org-babel-after-execute-hook #'org-display-inline-images)
+
+#+end_src
+
+* PEEP DIRED
+Peep Dired is an Emacs package that allows peeping into files while in Emac's file manager (dired) this allows viewing the contents of a file without actually opening it.
+
+#+begin_src emacs-lisp
+  (use-package peep-dired
+    :after dired
+    :hook (evil-normalize-keymaps . peep-dired-hook)
+    :config
+    (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
+    (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
+    (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+#+end_src
+
+* PROJECTILE
+[[https://github.com/bbatsov/projectile][Projecttile]] is a project intergration library for Emacs. It provides a powerful set of features operating at the project level, as well as simple heuristics to identify projects.
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :config
+    (projectile-mode 1))
+#+end_src
+
+* RAINBOW MODE
+Rainbow Mode is an Emacs plugin that displays the actual color of the hex code value you are typing as the background (ex. #ffffff). The code block below enables rainbow mode in all programing modes (prog-mode) as well as org-mode.
+
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :hook org-mode prog-mode)
+#+end_src
+
+* RELOAD EMACS
+This is just a simple function to reload Emacs, usually loading the user init file doesn't work if you only do it once and doing it twice seems to mysteriously fix the issue.
+
+#+begin_src emacs-lisp
+  (defun reload-init-file ()
+    (interactive)
+    (load-file user-init-file)
+    (load-file user-init-file))
+#+end_src
+
+* SHELLS AND TERMINALS
+With Emacs you have various options to choose between shells that you would want to use, below is a table with all the Pros and Cons of each, however you can use multiple at a time. However the default Slice only comes with Vshell as it is the best terminal for most users, and most users do not need a dedicated shell.
+
+| Terminal Emulator / Shell | Benefits                                                                 | Drawbacks                                                          |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `ansi-term`              | - Full terminal emulation                                               | - Less integration with Emacs commands                            |
+|                          | - Supports interactive programs                                        | - Slower rendering compared to native Emacs modes                 |
+|                          | - Works well with interactive shells like bash/zsh                      | - Harder to customize keybindings                                 |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `term`                   | - Similar to ansi-term but older                                        | - Same as ansi-term drawbacks                                    |
+|                          | - Good terminal emulation                                              |                                                                   |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `shell`                  | - Runs inferior shell inside Emacs                                     | - Not a full terminal emulator                                   |
+|                          | - Easy integration with Emacs commands                                | - Limited support for interactive programs                       |
+|                          | - Better for simple shell commands                                    | - Output sometimes misformatted                                  |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `eshell`                 | - Written entirely in Emacs Lisp                                      | - Very portable, no external dependencies                        |
+|                          | - Integrates tightly with Emacs features (e.g. buffers, Lisp)         | - Performance slower than native shells                          |
+|                          | - Can execute Emacs Lisp commands directly                            | - Not fully compatible with all shell scripts                    |
+|                          | - Cross-platform                                                    | - Not a real terminal, some programs may not work properly       |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `vterm`                  | - Uses libvterm (native terminal emulator library)                   | - Requires external dependencies (libvterm, C compiler)          |
+|                          | - Full-featured, fast, accurate terminal emulation                  | - More complex setup                                             |
+|                          | - Excellent support for interactive programs (vim, tmux, etc.)    | - May have issues on some platforms                              |
+|                          | - Supports true color and advanced terminal features              |                                                                   |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `multi-term`             | - Wrapper around `term` or `ansi-term` with enhancements           | - Depends on underlying terminal emulator used                  |
+|                          | - Allows managing multiple terminal buffers easily                | - Same drawbacks as `term` or `ansi-term`                       |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `shell-pop`              | - Provides quick toggleable shell popup                             | - Relies on existing shell backend (usually `shell`)            |
+|                          | - Convenient for fast shell access                                  | - Limited terminal emulation features                           |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+| `eshell` + `esh-module`  | - Extend eshell with modules for external commands and features    | - Still limited in full terminal emulation                       |
+|                          | - Very flexible and extensible                                     | - Performance overhead                                           |
+|--------------------------+--------------------------------------------------------------------------+-------------------------------------------------------------------|
+This table was created by OpenAI's ChatGPT 4o-mini
+
+Vterm is a terminal emulator that uses libvterm which is a native terminal emulator, it supports true color and is often considered the fastest terminal emulator for emacs. Vterm toggle allows the easy toggling of Vterm from a keybind.
+
+The Code to get VTerm Toggle to work was directly copied from [[gitlab.com/dwt1/configuring-emacs][DistroTube's Vanilla Emacs Configuration]] so full credits go to him for the VTerm Toggle code.
+
+#+begin_src emacs-lisp
+  (use-package vterm)
+
+  (use-package vterm-toggle
+    :after vterm
+    :config
+    (setq vterm-toggle-fullscreen-p nil)
+    (setq vterm-toggle-scope 'project)
+    (add-to-list 'display-buffer-alist
+                 '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                   (display-buffer-reuse-window display-buffer-at-bottom)
+                   ;;(display-buffer-reuse-window display-buffer-in-direction)
+                   ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                   ;;(direction . bottom)
+                   ;;(dedicated . t) ;dedicated is supported in emacs27
+                   (reusable-frames . visible)
+                   (window-height . 0.4))))
+#+end_src
+
+* THEMEING
+Choosing a theme for Emacs gives it personality, hense we have three options for themeing, you can use the Doom Themes Repository as it's themed are super well made, and it has lots of them. Or use the custom themes made for CakeMacs, CakeMacs Light and CakeMacs Dark.
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t    
+        doom-themes-enable-italic t)
+  (load-theme 'doom-nord t)
+  (doom-themes-neotree-config)
+  (doom-themes-org-config))
+#+end_src
+
+* VERTICO COMPLETION STACK
+The Vertico Completion Stack is a modern, lightweight, and modular completion system for Emacs which greatly improves the built-in minibuffers. The Vertico is a competitor to the Ivy Stack but focuses on simplicity performance and flexibility while providing powerful features, which is perfect for the CakeMacs philosophy.
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :init
+    (vertico-mode))
+
+  (use-package orderless
+    :init
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles basic partial-completion)))))
+
+  (use-package marginalia
+    :after vertico
+    :init
+    (marginalia-mode))
+
+  (use-package consult
+    :init
+    (setq consult-preview-key 'any))
+
+  (use-package embark
+    :init
+    (setq prefix-help-command #'embark-prefix-help-command))
+
+  (use-package embark-consult
+    :after (embark consult)
+    :hook (embark-collect-mode . consult-preview-at-point-mode))
+
+  (setq enable-recursive-minibuffers t)
+#+end_src
+
+* WHICH-KEY
+Whick Key is a Emacs package that shows the avaliable keybindings if the user is idle after a defined period of time after using the leader key, it's perfect for others learning your Slice, and first using your Slice and learning it yourself.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+  :init
+    (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+	  which-key-sort-order #'which-key-key-order-alpha
+	  which-key-sort-uppercase-first nil
+	  which-key-add-column-padding 1
+	  which-key-max-display-columns nil
+	  which-key-min-display-lines 6
+	  which-key-side-window-slot -10
+	  which-key-side-window-max-height 0.25
+	  which-key-idle-delay 0.8
+	  which-key-max-description-length 25
+	  which-key-allow-imprecise-window-fit t
+	  which-key-separator " → " ))
+#+end_src
