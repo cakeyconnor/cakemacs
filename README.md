@@ -32,7 +32,7 @@ GNU Core Utils
 
 (Optional but recommended) fd (for improved file indexing performance)
 
-Installation
+# Installation
 
 ``git clone --depth 1 https://github.com/connorakey/cakemacs ~/.cakemacs.d
 ~/.cakemacs.d/bin/cakemacs install``
