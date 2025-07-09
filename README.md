@@ -15,8 +15,6 @@ Flexible organization: You decide how to structure your config and the level of 
 
 Powerful defaults: Comes preconfigured with solid setups for coding, text editing, and system navigation.
 
-Slices: Define your own modular config files ("slices") that can be loaded as needed. For example, if your essentials list feels cluttered, just move it to a slice and require it when you want.
-
 ## What Are Slices?
 A slice is a user-published CakeMacs configuration — usually a .org file tailored to your needs. Since CakeMacs is highly configurable, slices vary widely. There’s no shame in using someone else’s slice!
 If CakeMacs grows, I plan to maintain a centralized repository of community slices.
