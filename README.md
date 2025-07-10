@@ -20,15 +20,15 @@ A slice is a user-published CakeMacs configuration — usually a .org file tailo
 If CakeMacs grows, I plan to maintain a centralized repository of community slices.
 
 # Prerequisites
-Git
+- Git
 
-Emacs
+- Emacs
 
-ripgrep
+- ripgrep
 
-GNU Core Utils
+- GNU Core Utils
 
-(Optional but recommended) fd (for improved file indexing performance)
+- (Optional but recommended) fd (for improved file indexing performance)
 
 # Installation
 
@@ -41,15 +41,15 @@ The CakeMacs installation command is required twice as the first instance of the
 It’s a good idea to add ~/.cakemacs.d/bin to your $PATH.
 Some handy commands:
 
-``cakemacs sync`` — Synchronizes your config with the latest updates from GitHub (git pull).
+- ``cakemacs sync`` — Synchronizes your config with the latest updates from GitHub (git pull).
 
-``cakemacs install`` — Installs CakeMacs, so launching Emacs uses your CakeMacs config.
+- ``cakemacs install`` — Installs CakeMacs, so launching Emacs uses your CakeMacs config.
 
-``cakemacs uninstall`` — Uninstalls CakeMacs without deleting config files, allowing safe recovery if needed.
+- ``cakemacs uninstall`` — Uninstalls CakeMacs without deleting config files, allowing safe recovery if needed.
 
-``cakemacs purge`` — Completely removes all CakeMacs files unsafely (no recovery).
+- ``cakemacs purge`` — Completely removes all CakeMacs files unsafely (no recovery).
 
-``cakemacs help`` — Displays available CakeMacs commands and usage info.
+- ``cakemacs help`` — Displays available CakeMacs commands and usage info.
 
 # Contributing
 
