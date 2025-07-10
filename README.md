@@ -33,7 +33,9 @@ GNU Core Utils
 # Installation
 
 ``git clone --depth 1 https://github.com/connorakey/cakemacs ~/.cakemacs.d &&
-~/.cakemacs.d/bin/cakemacs install``
+~/.cakemacs.d/bin/cakemacs install && ~/.cakemacs.d/bin/cakemacs install``
+
+The CakeMacs installation command is required twice as the first instance of the command initalises the shell script that is used for executing the nessessary commands, and the second instance actually installs CakeMacs.
 
 # Useful CakeMacs Commands
 It’s a good idea to add ~/.cakemacs.d/bin to your $PATH.
