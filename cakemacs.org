@@ -165,6 +165,7 @@ This will likely be one of the most configured areas in the entire configuration
      "x" '(execute-extended-command :wk "Consult M-x")
      "."   '(dired :wk "Find file")
 
+     "f" '(:ignore t :wk "Find")
      "f c" '((lambda () (interactive) (find-file "~/.cakemacs.d/cakemacs.org")) :wk "Edit Emacs configuration")
      "f r" '(consult-recent-file :wk "Find recent files")
      "TAB TAB" '(comment-line :wk "Comment lines")
