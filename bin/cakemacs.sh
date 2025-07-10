@@ -1,4 +1,5 @@
 #!/bin/sh
+# Posix compliant script to manage CakeMacs, use the help command for more information on each specific command.
 
 case "$1" in
     sync)
