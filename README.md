@@ -1,7 +1,7 @@
 [![CakeMacs Logo](https://github.com/connorakey/cakemacs/blob/main/resources/images/cakemacs.png?raw=true)](https://github.com/connorakey/cakemacs)
 
 # CakeMacs
-Welcome to CakeMacs, an Emacs distribution and a hobby project maintained by Connor Akey.
+Welcome to CakeMacs, an Emacs distribution and a hobby project maintained by me.
 The goal is to provide a future-proof, minimal-setup Emacs distro that’s easy to customize and perfect for myself and others, combining new technologies and clean standards.
 
 ## Who Is This For?
