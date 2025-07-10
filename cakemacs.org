@@ -702,7 +702,7 @@ Choosing a theme for Emacs gives it personality, hense we have three options for
   :config
   (setq doom-themes-enable-bold t    
         doom-themes-enable-italic t)
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-shades-of-purple-theme t)
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 #+end_src
