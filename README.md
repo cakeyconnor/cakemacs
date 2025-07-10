@@ -32,7 +32,7 @@ GNU Core Utils
 
 # Installation
 
-``git clone --depth 1 https://github.com/connorakey/cakemacs && ~/.cakemacs.d
+``git clone --depth 1 https://github.com/connorakey/cakemacs ~/.cakemacs.d &&
 ~/.cakemacs.d/bin/cakemacs install``
 
 # Useful CakeMacs Commands
