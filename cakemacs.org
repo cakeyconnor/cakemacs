@@ -695,7 +695,7 @@ The Code to get VTerm Toggle to work was directly copied from [[gitlab.com/dwt1/
 #+end_src
 
 * THEMEING
-Choosing a theme for Emacs gives it personality, hense we have three options for themeing, you can use the Doom Themes Repository as it's themed are super well made, and it has lots of them. Or use the custom themes made for CakeMacs, CakeMacs Light and CakeMacs Dark.
+Choosing a theme for Emacs gives it personality, hense we have three options for themeing, you can use the Doom Themes Repository as it's themed are super well made, and it has lots of them. Or use the custom themes made for CakeMacs, CakeMacs Light and CakeMacs Dark. (CakeMacs themes area not made yet, and will be made in the future)
 
 #+begin_src emacs-lisp
   (use-package doom-themes
